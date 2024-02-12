@@ -1,0 +1,188 @@
+
+<!-- <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-rbs5uFf/2XbTTbAg8Hr+3vjz6pGh5Tkx39e8SFA5xz9eKthhpzpe8rW+HDUz59a4" crossorigin="anonymous">
+</head> -->
+<body>
+    <div class="container">
+      <div class="justify-content-between row">
+        <img src="assets/ncc.png" style="height: 100px; width: 100px;" class="col-2">
+         <h1 class="text-center col-8"  style="margin-left:-30px;">
+          <B>NOMINAL ROLL OF THE NCC SD/SW CADETES</B>
+           <h3>NCC Cadets</h3>
+           <h2 style="margin-top: -25PX;">
+           LAL BAHADUR SHASTRI MAHAVIDHYLAY,DHARMABAD DISTRICT NANDED
+           </h2>
+         </h1> 
+        <img src="assets/lbs.jpg" class="col-2" style="height: 90px; width:115px;" >
+      </div>
+      
+       
+        
+        <div class="float-end">
+            <button class="text-light btn btn-primary m-1 edit bi bi-plus-circle" (click)="resetForm()"  data-bs-toggle="modal" data-bs-target="#edit">
+                <b>Create Cadet</b>
+            </button>
+            <button class="text-light m-1 btn btn-success edit bi bi-file-earmark-excel" (click)="export()">
+                <b>Excel Export</b>
+            </button>
+        </div>
+        <div class="table">
+        <table class="table table-bordered table-striped table-hover " id="example" #dataTable>
+          <thead>
+            <tr class="text-center ">
+            <td>Sr.No</td>
+            <td>Reg.No</td>
+            <td>Rank</td>
+            <td>Name of Cadet</td>
+            <td>FatherName</td>
+            <td>Address</td>
+            <td>Class</td>
+            <td>Date Of Birth</td>
+            <td>Year of NCC</td>
+            <td>Bank Name</td>
+            <td>Bank A/C No</td>
+            <td>IFSC Code</td>
+            <td>Mobile</td>
+            <td>Adhar No</td>
+            <td>Remark</td>
+            <td>Edit</td>
+            </tr>
+          </thead>
+          <tbody class="text-center">
+            <tr *ngFor="let user of users">
+              <td>{{user.srNo}}</td>
+              <td>{{user.regNo}}</td>
+              <td>{{user.rank}}</td>
+              <td>{{user.name}}</td> 
+              <td>{{user.fatherName}}</td> 
+              <td>{{user.address}}</td>
+              <td>{{user.className}}</td> 
+              <td>{{user.dateOfBirth}}</td>
+              <td>{{user.yearOfNcc}}</td>
+              <td>{{user.bankName}}</td>
+              <td>{{user.accountNo}}</td>
+              <td>{{user.ifcCode}}</td>
+              <td>{{user.mobile}}</td>
+              <td>{{user.adhar}}</td> 
+              <td>{{user.remark}}</td>
+              <td class="text-center">
+                <i type="button"  data-bs-toggle="modal" data-bs-target="#edit" (click)="edit(user)" class="bi bi-pencil-fill"></i>
+                <!-- <i type="button" data-bs-toggle="modal" data-bs-target="#deleteModal"  (click)="delete(user.mobile)"  (click)="loadUsers()" class="bi bi-trash-fill"></i> -->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+       </div> 
+    </div>
+
+    <div class="modal fade" id="edit">
+        <div class="modal-dialog " >
+            <div class="modal-content">
+                <div class="modal-header " >
+                    <h4 class="modal-title "><b>Cadet Information</b></h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                <div class="modal-body">
+                    <form  [formGroup]="userfrm">
+                       <div>
+                         
+                          <label for="srNo" class="form-label">Sr.No<label class="text-danger">*</label></label>
+                          <input type="text" class="form-control" id="srNO" placeholder="Enter Sr No" formControlName="srNo">
+                          <div class="text-danger" *ngIf="userfrm.controls.srNo.touched && userfrm.controls.srNo.invalid">
+                            <div *ngIf="userfrm.controls.srNo.errors?.['required']" >Sr.No Required</div>
+                          </div>
+
+                          <label for="regNo" class="form-label">Reg.NO<label class="text-danger">*</label></label>
+                          <input type="text" class="form-control" id="regNo" placeholder="Enter RegNo" formControlName="regNo">
+                          <div class="text-danger" *ngIf="userfrm.controls.regNo.touched && userfrm.controls.regNo.invalid">
+                            <div *ngIf="userfrm.controls.regNo.errors?.['required']" >Reg.No Required</div>
+                          </div>
+
+                          <label for="rank" class="form-label">Rank<label class="text-danger">*</label></label>
+                          <input type="text" class="form-control" id="rank" placeholder="Enter Rank" formControlName="rank">
+                          <div class="text-danger" *ngIf="userfrm.controls.rank.touched && userfrm.controls.rank.invalid">
+                            <div *ngIf="userfrm.controls.rank.errors?.['required']" >Rank Required</div>
+                          </div>
+
+                          <label for="name" class="form-label">Name of Cadet<label class="text-danger">*</label></label>
+                          <input type="text" class="form-control" id="name" placeholder="Enter Name of Cadet" formControlName="name">
+                          <div class="text-danger" *ngIf="userfrm.controls.name.touched && userfrm.controls.name.invalid">
+                            <div *ngIf="userfrm.controls.name.errors?.['required']" >Name Required</div>
+                          </div>
+
+                          <label for="fatherName" class="form-label">Father Name & Address<label class="text-danger">*</label></label>
+                          <textarea type="text" class="form-control" id="fatherName" placeholder="Enter Father Name" formControlName="fatherName"></textarea>
+                          <div class="text-danger" *ngIf="userfrm.controls.fatherName.touched && userfrm.controls.fatherName.invalid">
+                            <div *ngIf="userfrm.controls.fatherName.errors?.['required']" >FatherName  Required</div>
+                          </div>
+
+                          <label for="address" class="form-label">Address<label class="text-danger">*</label></label>
+                          <textarea type="text" class="form-control" id="address" placeholder="Enter Address" formControlName="address"></textarea>
+                          <div class="text-danger" *ngIf="userfrm.controls.address.touched && userfrm.controls.address.invalid">
+                            <div *ngIf="userfrm.controls.address.errors?.['required']" >Address Required</div>
+                          </div>
+
+                          <label for="className" class="form-label">Class<label class="text-danger">*</label></label>
+                          <input type="text" class="form-control" id="className" placeholder="Enter Class" formControlName="className">
+                          <div class="text-danger" *ngIf="userfrm.controls.className.touched && userfrm.controls.className.invalid">
+                            <div *ngIf="userfrm.controls.className.errors?.['required']" >LastName Required</div>
+                          </div>
+
+                          <label for="dateOfBirth" class="form-label">Date Of Birth<label class="text-danger">*</label></label>
+                          <input type="date" class="form-control" id="dateOfBirth" placeholder="Enter Date of Birth" formControlName="dateOfBirth">
+                          <div class="text-danger" *ngIf="userfrm.controls.dateOfBirth.touched && userfrm.controls.dateOfBirth.invalid">
+                            <div *ngIf="userfrm.controls.dateOfBirth.errors?.['required']" >Date Of Birth Required</div>
+                          </div>
+
+                          <label for="yearOfNcc" class="form-label">Year Of NCC<label class="text-danger">*</label></label>
+                          <input type="text" class="form-control" id="yearOfNcc" placeholder="Enter Year Of NCC" formControlName="yearOfNcc">
+                          <div class="text-danger" *ngIf="userfrm.controls.yearOfNcc.touched && userfrm.controls.yearOfNcc.invalid">
+                            <div *ngIf="userfrm.controls.yearOfNcc.errors?.['required']" >Year of Ncc Required</div>
+                          </div>
+
+                          <label for="bankName" class="form-label">Bank Name<label class="text-danger">*</label></label>
+                          <input type="text" class="form-control" id="bankName" placeholder="Enter Bank Name" formControlName="bankName">
+                          <div class="text-danger" *ngIf="userfrm.controls.bankName.touched && userfrm.controls.bankName.invalid">
+                            <div *ngIf="userfrm.controls.bankName.errors?.['required']" >Bank Name Required</div>
+                          </div>
+
+                          <label for="accountNo" class="form-label">Bank A/C No<label class="text-danger">*</label></label>
+                          <input type="text" class="form-control" id="accountNo" placeholder="Enter Bank A/C No" formControlName="accountNo">
+                          <div class="text-danger" *ngIf="userfrm.controls.accountNo.touched && userfrm.controls.accountNo.invalid">
+                            <div *ngIf="userfrm.controls.accountNo.errors?.['required']" >Rank Required</div>
+                          </div>
+
+                          <label for="ifcCode" class="form-label">IFSC Code <label class="text-danger">*</label></label>
+                          <input type="text" class="form-control" id="ifcCode" placeholder="Enter IFSC Code " formControlName="ifcCode">
+                          <div class="text-danger" *ngIf="userfrm.controls.ifcCode.touched && userfrm.controls.ifcCode.invalid">
+                            <div *ngIf="userfrm.controls.ifcCode.errors?.['required']" >IFSC Code Required</div>
+                          </div>
+
+                          <label for="mobile" class="form-label">Mobile<label class="text-danger">*</label></label>
+                          <input type="text" class="form-control" id="mobile" placeholder="Enter Mobile No" formControlName="mobile">
+                          <div class="text-danger" *ngIf="userfrm.controls.mobile.touched && userfrm.controls.mobile.invalid">
+                            <div *ngIf="userfrm.controls.mobile.errors?.['required']" >Mobile Required</div>
+                          </div>
+
+                          <label for="adhar" class="form-label">Adhar No<label class="text-danger">*</label></label>
+                          <input type="text" class="form-control" id="adhar" placeholder="Enter Adhar No" formControlName="adhar">
+                          <div class="text-danger" *ngIf="userfrm.controls.adhar.touched && userfrm.controls.adhar.invalid">
+                            <div *ngIf="userfrm.controls.adhar.errors?.['required']" >Adhar Required</div>
+                          </div>
+                           
+                          <label for="remark">Remark</label>
+                          <input type="text" class="form-control" id="remark" placeholder="Enter Remark" formControlName="remark">
+                    </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                  <button data-bs-dismiss="modal" class="btn btn-danger">Cancel</button>
+                  <button type="submit" class="btn btn-primary"    (click)="addOrUpdateUser()" >{{ modalMode === 'create' ? 'Submit' : 'Update' }}</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
