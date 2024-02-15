@@ -3,6 +3,7 @@ import { User } from '../user';
 import { FormBuilder, Validators,FormGroup } from '@angular/forms';
 import { UserService } from '../user.service';
 import { saveAs } from 'file-saver';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
@@ -16,7 +17,7 @@ export class UserComponent implements OnInit{
   users: any = [];
   
   
-  constructor(  private fb:FormBuilder,private userService:UserService) { }
+  constructor(  private fb:FormBuilder,private userService:UserService,private toast:ToastrService) { }
 
 
   public userfrm = this.fb.group({
@@ -68,20 +69,19 @@ export class UserComponent implements OnInit{
     );
   }
 
-  ngAfterViewInit() {
-    // DataTables initialization should be done here if the table content is dynamic
-    $(document).ready(function() {
-      setTimeout(()=>{
-        $('#example').DataTable({
-          lengthMenu:[2,4,6],
-          ordering:true,
-          retrieve:true,
-          paging:true,
-          // scrollY:"350px",
-        });
-      },1000);
-    });
-  }
+  // ngAfterViewInit() {
+  //   // DataTables initialization should be done here if the table content is dynamic
+  //   $(document).ready(function() {
+  //     setTimeout(()=>{
+  //       $('#example').DataTable({
+  //         lengthMenu:[2,4,6],
+  //         ordering:true,
+  //         retrieve:true,
+  //         paging:true 
+  //       });
+  //     },1000);
+  //   });
+  // }
 
   addOrUpdateUser() {
     if (this.modalMode === 'create') {
@@ -89,14 +89,20 @@ export class UserComponent implements OnInit{
     } else if (this.modalMode === 'edit') {
       this.update();
     }
-    this.loadUsers();
-    this.resetForm();
   }
 
 get() {
   this.userService.getCadet().subscribe(data => {
     this.users = data;
      console.log(this.users)
+     setTimeout(()=>{
+      $('#example').DataTable({
+        lengthMenu:[2,4,6],
+        ordering:true,
+        retrieve:true,
+        paging:true 
+      });
+    },1000);
   });
 }
 
@@ -104,22 +110,31 @@ get() {
 create(){
   console.log(this.user);
   const user1 = this.userfrm.value;
+  if(this.userfrm.valid){
   this.userService.createCadet(user1).subscribe((data:User)=>{
    console.log(data);
+   this.toast.success('🤩Cadet Added Successfully...!','success');
    this.loadUsers();
   });
+}else{
+  this.toast.error('🤔something went wrong...!','error');
+}
 }
 
   
 update(){
   console.log(this.users);
   const User = this.userfrm.value;
+  if(this.userfrm.valid){
   this.userService.updateCadet(this.userfrm.value ).subscribe((data: User) => {
       console.log(data);
-     this.loadUsers();
-    }
-  );
- 
+      this.toast.success('🤩Cadet Updeted Successfully...!','success');
+     this.loadUsers();    
+    });
+  }else{
+    this.toast.error('🤔somthing went wrong...!','error');
+  }
+  this.loadUsers();
 }
 
 delete(mobile: any): void {
